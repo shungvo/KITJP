@@ -1,14 +1,13 @@
-"use client"
+"use client";
 
-import React from "react"
-import AnimatedSection from "@/components/AnimatedSection"
-import AnimatedImage from "@/components/AnimatedImage"
-import AnimatedButton from "@/components/AnimatedButton"
-import SectionHeader from "@/components/SectionHeader"
-import { useRecruitData } from "@/hooks/useRecruitData"
+import AnimatedButton from "@/components/AnimatedButton";
+import AnimatedSection from "@/components/AnimatedSection";
+import SectionHeader from "@/components/SectionHeader";
+import { useRecruitData } from "@/hooks/useRecruitData";
+import React from "react";
 
 export default function RecruitSection() {
-  const { data, loading, error } = useRecruitData()
+  const { data, loading, error } = useRecruitData();
 
   if (loading || !data) {
     return (
@@ -33,17 +32,19 @@ export default function RecruitSection() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="py-16 px-4 bg-primary-kit-light/10 dark:bg-primary-kit-dark/10">
         <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-red-500">データの読み込み中にエラーが発生しました。</p>
+          <p className="text-red-500">
+            データの読み込み中にエラーが発生しました。
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -51,7 +52,7 @@ export default function RecruitSection() {
       className="py-16 px-4 relative bg-primary-kit-light/10 dark:bg-primary-kit-dark/10"
       aria-labelledby="recruit-heading"
     >
-      <div className="absolute inset-0 opacity-10">
+      {/* <div className="absolute inset-0 opacity-10">
         <AnimatedImage
           src={data.backgroundImage}
           alt="都市の背景"
@@ -61,11 +62,21 @@ export default function RecruitSection() {
           priority={false}
           animation="fadeIn"
         />
-      </div>
+      </div> */}
       <div className="container mx-auto max-w-4xl relative z-10">
-        <SectionHeader title={data.title} subtitle={data.subtitle} id="recruit-heading" />
-        <AnimatedSection className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-md" animation="scaleUp" delay={0.2}>
-          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">{data.engineerTitle}</h3>
+        <SectionHeader
+          title={data.title}
+          subtitle={data.subtitle}
+          id="recruit-heading"
+        />
+        <AnimatedSection
+          className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-md"
+          animation="fadeUp"
+          delay={0.2}
+        >
+          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">
+            {data.engineerTitle}
+          </h3>
           <p className="text-base leading-relaxed mb-6">
             {data.engineerDescription.map((line, index) => (
               <React.Fragment key={index}>
@@ -74,7 +85,9 @@ export default function RecruitSection() {
               </React.Fragment>
             ))}
           </p>
-          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">{data.salesTitle}</h3>
+          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">
+            {data.salesTitle}
+          </h3>
           <p className="text-base leading-relaxed mb-6">
             {data.salesDescription.map((line, index) => (
               <React.Fragment key={index}>
@@ -95,6 +108,5 @@ export default function RecruitSection() {
         </AnimatedSection>
       </div>
     </AnimatedSection>
-  )
+  );
 }
-
