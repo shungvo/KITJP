@@ -14,7 +14,7 @@ import {
   organizationSchema,
 } from "@/utils/schema";
 import type { Metadata } from "next";
-
+export const dynamic = "force-dynamic"; // Bắt buộc gọi API mỗi lần
 export const metadata: Metadata = getMetadata("home");
 
 export default async function Home() {
