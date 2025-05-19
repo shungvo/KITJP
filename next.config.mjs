@@ -2,7 +2,10 @@
 const nextConfig = {
   // Use src/app as the App Router directory (default in Next.js 13.4+)
   // No need for experimental.appDir unless customizing
-
+  env: {
+    MICROCMS_SERVICE_DOMAIN: process.env.MICROCMS_SERVICE_DOMAIN,
+    MICROCMS_API_KEY: process.env.MICROCMS_API_KEY,
+  },
   reactStrictMode: true,
   images: {
     domains: ["placeholder.com"],

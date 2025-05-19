@@ -5,10 +5,16 @@ import AnimatedSection from "@/components/AnimatedSection";
 import SectionHeader from "@/components/SectionHeader";
 import { useRecruitData } from "@/hooks/useRecruitData";
 import React from "react";
+import { RecruitContent } from "@/apis/HomPageContent/type";
 
-export default function RecruitSection() {
-  const { data, loading, error } = useRecruitData();
+interface RecruitSectionProps {
+  data: RecruitContent;
+  loading: boolean;
+  error: Error | null;
+}
 
+export default function RecruitSection(props: RecruitSectionProps) {
+  const { data, loading, error } = props;
   if (loading || !data) {
     return (
       <div className="py-16 px-4 bg-primary-kit-light/10 dark:bg-primary-kit-dark/10">
@@ -65,7 +71,7 @@ export default function RecruitSection() {
       </div> */}
       <div className="container mx-auto max-w-4xl relative z-10">
         <SectionHeader
-          title={data.title}
+          title={data?.title}
           subtitle={data.subtitle}
           id="recruit-heading"
         />
@@ -74,35 +80,14 @@ export default function RecruitSection() {
           animation="fadeUp"
           delay={0.2}
         >
-          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">
-            {data.engineerTitle}
-          </h3>
-          <p className="text-base leading-relaxed mb-6">
-            {data.engineerDescription.map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                <br />
-              </React.Fragment>
-            ))}
-          </p>
-          <h3 className="text-green-700 dark:text-green-500 font-medium text-lg mb-4">
-            {data.salesTitle}
-          </h3>
-          <p className="text-base leading-relaxed mb-6">
-            {data.salesDescription.map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                <br />
-              </React.Fragment>
-            ))}
-          </p>
+         <div dangerouslySetInnerHTML={{__html: data.description}}/>
           <div className="text-center mt-8">
             <AnimatedButton
-              href={data.buttonUrl}
+              href={'/'}
               className="inline-block bg-primary-kit dark:bg-primary-kit-dark text-white px-6 py-2 text-sm hover:bg-primary-kit-dark dark:hover:bg-primary-kit transition"
               ariaLabel={`${data.title}ページへ`}
             >
-              {data.buttonText}
+              View more
             </AnimatedButton>
           </div>
         </AnimatedSection>

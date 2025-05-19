@@ -1,20 +1,33 @@
-import type { Metadata } from "next"
-import { getMetadata } from "@/utils/metadata"
-import MainLayout from "@/components/layouts/MainLayout"
-import SectionHeader from "@/components/SectionHeader"
-import ContactCTA from "@/components/ContactCTA"
-import JsonLd from "@/components/ui/JsonLd"
-import { organizationSchema, localBusinessSchema, breadcrumbSchema } from "@/utils/schema"
-import HeroSection from "@/components/home/HeroSection"
-import NewsSection from "@/components/NewsSection"
-import BusinessSection from "@/components/home/BusinessSection"
-import CompanySection from "@/components/home/CompanySection"
-import PrivacySection from "@/components/home/PrivacySection"
-import RecruitSection from "@/components/home/RecruitSection"
+import { getHomeData } from "@/apis/HomPageContent";
+import ContactCTA from "@/components/ContactCTA";
+import BusinessSection from "@/components/home/IntroductionSection";
+import HeroSection from "@/components/home/HeroSection";
+import RecruitSection from "@/components/home/RecruitSection";
+import MainLayout from "@/components/layouts/MainLayout";
+import NewsSection from "@/components/NewsSection";
+import SectionHeader from "@/components/SectionHeader";
+import JsonLd from "@/components/ui/JsonLd";
+import { getMetadata } from "@/utils/metadata";
+import {
+  breadcrumbSchema,
+  localBusinessSchema,
+  organizationSchema,
+} from "@/utils/schema";
+import type { Metadata } from "next";
 
-export const metadata: Metadata = getMetadata("home")
+export const metadata: Metadata = getMetadata("home");
 
-export default function Home() {
+export default async function Home() {
+  const { data, loading, error } = await getHomeData();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || !data) {
+    return <div>Error: {error?.message || "Failed to load data"}</div>;
+  }
+
   return (
     <>
       <JsonLd data={organizationSchema} />
@@ -22,8 +35,7 @@ export default function Home() {
       <JsonLd data={breadcrumbSchema([{ name: "ホーム", item: "/" }])} />
 
       <MainLayout>
-        <HeroSection />
-
+        <HeroSection data={data.hero} loading={loading} error={error} />
         <section className="py-16 px-4" aria-labelledby="news-heading">
           <div className="container mx-auto max-w-4xl">
             <SectionHeader title="ニュース" subtitle="News" id="news-heading" />
@@ -31,14 +43,33 @@ export default function Home() {
           </div>
         </section>
 
-        <BusinessSection />
-        <CompanySection />
-        <PrivacySection />
-        <RecruitSection />
+        {/* <BusinessSection
+          data={data.introduction}
+          loading={loading}
+          error={error}
+        />
+        <CompanySection
+          data={data.introduction}
+          loading={loading}
+          error={error}
+        />
+        <PrivacySection
+          data={data.introduction}
+          loading={loading}
+          error={error}
+        /> */}
+        {data.introduction.map((item) => (
+          <BusinessSection
+            key={item.title}
+            data={item}
+            loading={loading}
+            error={error}
+          />
+        ))}
+        <RecruitSection data={data.recruit} loading={loading} error={error} />
 
         <ContactCTA />
       </MainLayout>
     </>
-  )
+  );
 }
-

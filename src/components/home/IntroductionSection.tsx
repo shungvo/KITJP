@@ -1,15 +1,19 @@
-"use client"
+"use client";
 
-import React from "react"
-import AnimatedSection from "@/components/AnimatedSection"
-import AnimatedImage from "@/components/AnimatedImage"
-import AnimatedButton from "@/components/AnimatedButton"
-import SectionHeader from "@/components/SectionHeader"
-import { useBusinessData } from "@/hooks/useBusinessData"
+import { IntroductionContent } from "@/apis/HomPageContent/type";
+import AnimatedButton from "@/components/AnimatedButton";
+import AnimatedImage from "@/components/AnimatedImage";
+import AnimatedSection from "@/components/AnimatedSection";
+import SectionHeader from "@/components/SectionHeader";
 
-export default function BusinessSection() {
-  const { data, loading, error } = useBusinessData()
+interface BusinessSectionProps {
+  data: IntroductionContent;
+  loading: boolean;
+  error: Error | null;
+}
 
+export default function BusinessSection(props: BusinessSectionProps) {
+  const { data, loading, error } = props;
   if (loading || !data) {
     return (
       <div className="py-16 px-4 bg-gray-50 dark:bg-gray-800">
@@ -30,27 +34,42 @@ export default function BusinessSection() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="py-16 px-4 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-red-500">データの読み込み中にエラーが発生しました。</p>
+          <p className="text-red-500">
+            データの読み込み中にエラーが発生しました。
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <AnimatedSection className="py-16 px-4 bg-gray-50 dark:bg-gray-800" aria-labelledby="business-heading">
+    <AnimatedSection
+      className="py-16 px-4 bg-gray-50 dark:bg-gray-800"
+      aria-labelledby="business-heading"
+    >
       <div className="container mx-auto max-w-4xl">
-        <SectionHeader title={data.title} subtitle={data.subtitle} id="business-heading" />
-        <div className="flex flex-col md:flex-row gap-10 items-center">
+        <SectionHeader
+          title={data.title}
+          subtitle={data.subtitle}
+          id="business-heading"
+        />
+        <div
+          className={`flex flex-col ${
+            data.imagePosition[0] === "left"
+              ? "md:flex-row"
+              : "md:flex-row-reverse"
+          } gap-10 items-center`}
+        >
           <AnimatedSection className="md:w-2/3" animation="fadeUp" delay={0.1}>
-            <p className="text-base leading-relaxed mb-6">
-              {data.description.split("\n\n").map((paragraph, index) => (
+            <div className="text-base leading-relaxed mb-6">
+              {/* {data.description.split("\n\n").map((paragraph, index) => (
                 <React.Fragment key={index}>
                   {paragraph}
                   {index < data.description.split("\n\n").length - 1 && (
@@ -60,20 +79,21 @@ export default function BusinessSection() {
                     </>
                   )}
                 </React.Fragment>
-              ))}
-            </p>
+              ))} */}
+              <div dangerouslySetInnerHTML={{ __html: data.description }} />
+            </div>
             <AnimatedButton
-              href={data.buttonUrl}
+              href={data.slug}
               className="inline-block bg-primary-kit dark:bg-primary-kit-dark text-white px-6 py-2 text-sm hover:bg-primary-kit-dark dark:hover:bg-primary-kit transition"
               ariaLabel={`${data.title}ページへ`}
             >
-              {data.buttonText}
+              View more
             </AnimatedButton>
           </AnimatedSection>
           <div className="md:w-1/3">
             <AnimatedImage
-              src={data.imageUrl}
-              alt={data.imageAlt}
+              src={data.image[0].image.url}
+              alt={data.image[0].imageAlt}
               width={400}
               height={300}
               className="rounded-lg shadow-md"
@@ -83,6 +103,5 @@ export default function BusinessSection() {
         </div>
       </div>
     </AnimatedSection>
-  )
+  );
 }
-

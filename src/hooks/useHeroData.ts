@@ -1,35 +1,36 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import type { HeroData } from "@/data/homeData"
-import { api } from "@/utils/api"
+import { getHomeData } from "@/apis/HomPageContent";
+import type { HeroContent } from "@/apis/HomPageContent/type";
+import { useEffect, useRef, useState } from "react";
 
 export function useHeroData() {
-  const [data, setData] = useState<HeroData | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<Error | null>(null)
-  const dataFetchedRef = useRef(false)
+  const [data, setData] = useState<HeroContent | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const dataFetchedRef = useRef(false);
 
   useEffect(() => {
     // Prevent multiple fetches
-    if (dataFetchedRef.current) return
-    dataFetchedRef.current = true
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
 
     const fetchData = async () => {
       try {
-        setLoading(true)
-        const heroData = await api.getHeroData()
-        setData(heroData)
+        setLoading(true);
+        const homeData = await getHomeData();
+        setData(homeData.hero);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Unknown error occurred"))
+        setError(
+          err instanceof Error ? err : new Error("Unknown error occurred")
+        );
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  return { data, loading, error }
+  return { data, loading, error };
 }
-

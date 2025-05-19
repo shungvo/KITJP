@@ -1,21 +1,28 @@
-import type React from "react"
-import Image from "next/image"
+import Image from "next/image";
+import type React from "react";
 
 interface HeroProps {
-  title: string
-  subtitle?: string
-  description?: string | React.ReactNode
-  height?: string
+  title: string;
+  subtitle?: string;
+  description?: string | React.ReactNode;
+  height?: string;
+  image?: string;
 }
 
-export default function Hero({ title, subtitle, description, height = "h-[500px]" }: HeroProps) {
+export default function Hero({
+  title,
+  subtitle,
+  description,
+  height = "h-[500px]",
+  image,
+}: HeroProps) {
   return (
     <section
       className={`relative ${height} bg-gradient-to-r from-primary-kit-light to-primary-kit dark:from-primary-kit-dark dark:to-primary-kit overflow-hidden`}
     >
       <div className="absolute inset-0">
         <Image
-          src="/placeholder.svg?height=500&width=1200"
+          src={image || "/placeholder.svg?height=500&width=1200"}
           alt="Digital Network"
           fill
           className="object-cover opacity-30"
@@ -42,6 +49,5 @@ export default function Hero({ title, subtitle, description, height = "h-[500px]
         </div>
       </div>
     </section>
-  )
+  );
 }
-

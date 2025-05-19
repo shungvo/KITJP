@@ -4,8 +4,9 @@ interface BaseContent {
 }
 
 // Common image type
-interface MicroCMSImage {
-  alt: string;
+export interface MicroCMSImage {
+  fieldId: string;
+  imageAlt: string;
   image: {
     url: string;
     height: number;
@@ -14,7 +15,8 @@ interface MicroCMSImage {
 }
 type RichTextEditor = string;
 // Hero section type
-interface HeroContent extends BaseContent {
+export interface HeroContent {
+  fieldId: string;
   title: string;
   subtitle: string;
   description: string;
@@ -22,20 +24,21 @@ interface HeroContent extends BaseContent {
 }
 
 // News item type
-interface NewsContent extends BaseContent {
+export interface NewsContent {
+  fieldId: string;
   title: string;
-  content: string;
-  publishedDate: string;
-  category: string;
+  date: string;
+  category: string[];
 }
 
 // Business section type
-interface IntroductionContent extends BaseContent {
+export interface IntroductionContent {
+  fieldId: string;
   title: string;
   subtitle: string;
   description: string;
   image: MicroCMSImage[];
-  imagePosition: "left" | "right";
+  imagePosition: string[];
   slug: string;
 }
 
@@ -56,17 +59,24 @@ interface IntroductionContent extends BaseContent {
 // }
 
 // Recruit section type
-interface RecruitContent extends BaseContent {
+export interface RecruitContent {
+  fieldId: string;
   title: string;
   subtitle: string;
-  description: RichTextEditor;
-  slug: string;
+  description: string;
 }
 
 // Combined Home Page Data Type
+export interface HomePageResponse {
+  createdAt: string;
+  updatedAt: string;
+  Home: HomePageData;
+}
+
 export interface HomePageData {
+  fieldId: string;
   hero: HeroContent;
   news: NewsContent[];
-  introduction: IntroductionContent;
+  introduction: IntroductionContent[];
   recruit: RecruitContent;
 }
